@@ -1,11 +1,16 @@
 import { EditSFill, CheckCircleFill, EyeFill, InformationCircleFill, StarFill } from "antd-mobile-icons";
 import Widget from "@/components/widget";
 import { history } from "umi";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import context from "@/models/user";
 
 export default function HomePage() {
   const { userInfo } = useContext(context);
+  const [isAdmin, setIsAdmim] = useState(false);
+
+  useEffect(() => {
+    setIsAdmim(userInfo.IsAdmin);
+  }, [userInfo.IsAdmin]);
 
   return (
     <div className="p-5 flex justify-between flex-wrap">
@@ -20,7 +25,7 @@ export default function HomePage() {
         name="查看货物"
       />
       {
-        userInfo.IsAdmin ? <Widget
+        isAdmin ? <Widget
           onClick={() => history.push('/verify')}
           icon={<CheckCircleFill width={40} height={40} color="var(--adm-color-primary)" />}
           name="新人审核"

@@ -33,6 +33,7 @@ export default function Page() {
       AddressType: 'phone',
       Password: value.Password,
       IdentityID: value.IdentityID,
+      Price: value['Price'] && value['Price'][0],
       Name: value.Name,
       SuperiorID: Number(params.get('code')),
     });
@@ -111,6 +112,9 @@ export default function Page() {
         </Form.Item>
         <Form.Item label="身份证号" name="IdentityID">
           <Input placeholder="请输入身份证号" clearable />
+        </Form.Item>
+        <Form.Item label="进货价格" name="Price">
+          <Selector defaultValue={[190]} options={[190, 160, 135, 115, 95].map(item => ({ label: item, value: item }))} />
         </Form.Item>
         <Form.Item label="邀请人" name="invitename" initialValue={params.get('name')}>
           <Input placeholder="请扫邀请人二维码进行注册" clearable disabled />

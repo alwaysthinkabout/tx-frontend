@@ -5,7 +5,7 @@ export const request = async (path: string, type: 'get' | 'post', data?: Record<
     const res = await axios({
       url: path,
       method: type,
-      data,
+      data
     });
     return res?.data || {
       ResponseMetadata: {
