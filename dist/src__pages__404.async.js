@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunk=self.webpackChunk||[]).push([[650],{87882:function(l,n,u){u.r(n),u.d(n,{default:function(){return i}});var e=u(85489),t=u(62086);function i(){return(0,t.jsx)("div",{children:(0,t.jsx)(e.iE,{fullPage:!0,title:"404",description:"\u9875\u9762\u672A\u627E\u5230"})})}}}]);

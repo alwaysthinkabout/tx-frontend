@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import classnames from "classnames";
 import { history, useSearchParams } from "umi";
 import { Button, Form, Input, Selector, Toast, ErrorBlock } from "antd-mobile";
@@ -25,7 +25,16 @@ export default function Page() {
     }
   );
 
+  const judgeInvalid = () => {
+    if (!params.get('price')) {
+      Toast.show({ content: '二维码已失效，请重新向邀请人获取。' })
+      return false
+    }
+    return true
+  }
+
   const submit = async () => {
+    if (!judgeInvalid()) return
     const value = form.getFieldsValue();
     setLoading(true);
     const res = await register({
@@ -33,7 +42,7 @@ export default function Page() {
       AddressType: 'phone',
       Password: value.Password,
       IdentityID: value.IdentityID,
-      Price: value['Price'] && value['Price'][0],
+      Price: Number(params.get('price')),
       Name: value.Name,
       SuperiorID: Number(params.get('code')),
     });
@@ -63,6 +72,10 @@ export default function Page() {
       </Button>
     </div>
   }
+
+  useEffect(() => {
+    judgeInvalid()
+  }, [])
 
   return (
     <div className="p-5">
@@ -113,9 +126,9 @@ export default function Page() {
         <Form.Item label="身份证号" name="IdentityID">
           <Input placeholder="请输入身份证号" clearable />
         </Form.Item>
-        <Form.Item label="进货价格" name="Price">
-          <Selector defaultValue={[190]} options={[190, 160, 135, 115, 95].map(item => ({ label: item, value: item }))} />
-        </Form.Item>
+        {/* <Form.Item label="进货价格" name="Price">
+          <Selector defaultValue={[Number(params.get('price'))]} options={[190, 160, 135, 115, 95].map(item => ({ label: item, value: item }))} />
+        </Form.Item> */}
         <Form.Item label="邀请人" name="invitename" initialValue={params.get('name')}>
           <Input placeholder="请扫邀请人二维码进行注册" clearable disabled />
         </Form.Item>

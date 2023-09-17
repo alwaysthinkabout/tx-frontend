@@ -61,7 +61,7 @@ export const register = async ({
   Password: string;
   IdentityID: string;
   Name: string;
-  Price: number[];
+  Price: number;
   SuperiorID: number;
   VerificationCode?: string;
   BizID?: string;

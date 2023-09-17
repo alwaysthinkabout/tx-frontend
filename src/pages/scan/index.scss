@@ -1,0 +1,53 @@
+.scan-page {
+  .header {
+    display: flex;
+    justify-content: space-between;
+    .search-bar {
+      flex: 1;
+      margin-right: 10px;
+    }
+  }
+}
+
+.sao-ma-modal {
+  .title {
+    margin-bottom: 20px;
+  }
+  .scan-act {
+    margin-bottom: 20px;
+    font-size: 18px;
+    width: 100%;
+  }
+  .count {
+    white-space: nowrap;
+    margin-bottom: 20px;
+    .adm-input {
+      width: 150px;
+      display: inline-block;
+      margin-left: 8px;
+      input {
+        border: 1px solid gray;
+      }
+    }
+  }
+  .is-delivery {
+    margin-bottom: 20px;
+    .adm-radio {
+      margin-right: 20px;
+    }
+  }
+}
+
+.error-info-modal {
+  .adm-modal-title {
+    margin-bottom: 20px;
+  }
+  .error-line {
+    display: flex;
+    justify-content: space-between;
+    >span:last-child {
+      width: 70%;
+      margin-bottom: 20px;
+    }
+  }
+}

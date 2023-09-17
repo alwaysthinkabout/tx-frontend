@@ -19,18 +19,18 @@ export default function Layout() {
 
   useEffect(() => {
     checkLoginStatus().then(res => {
-      setUserInfo(window.userInfo || {});
       if (res === 'unlogin' && !location.pathname.includes('login')) {
         history.push('/login');
       } else if (res === 'review') {
         history.push('/login/review');
       }
+      setUserInfo(window.userInfo || {});
       initWX(window.userInfo?.SigInfo);
       window.wx.ready(function(){
         console.log('wx ready');
-      });      
+      });
     });
-  }, []);
+  }, [location.pathname]);
 
   useEffect(() => {
     setActiveKey(getTabBarKey(location));

@@ -1,0 +1,23 @@
+.qrcode-page {
+  padding: 0 20px;
+  .price-content {
+    .title {
+      font-size: 22px;
+      margin-bottom: 20px;
+    }
+    .adm-radio {
+      margin-right: 8px;
+    }
+    .product-qrcode-btn {
+      margin-top: 40px;
+    }
+  }
+  .return-btn {
+    margin-top: 20px;
+  }
+
+  .qrcode img{
+    width: 80vw;
+    height: 80vw;
+  }
+}

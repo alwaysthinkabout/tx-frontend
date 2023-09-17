@@ -34,7 +34,7 @@ export const deliveryProduct = async ({
   "QRCodeIDs": string[];
 }) => {
   return request(
-    '/api/v1/Return?Action=Return',
+    '/api/v1/Delivery?Action=Delivery',
     'post',
     {
       TargetUserID,
@@ -51,7 +51,7 @@ export const returnProduct = async ({
   "QRCodeIDs": string[];
 }) => {
   return request(
-    '/api/v1/Delivery?Action=Delivery',
+    '/api/v1/Return?Action=Return',
     'post',
     {
       TargetUserID,

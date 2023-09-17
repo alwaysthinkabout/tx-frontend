@@ -274,6 +274,7 @@ interface IConfigTypes {
     run: {
     globals?: (Array<string> | undefined);
 };
+    tailwindcss: { [x: string]: any };
 };
 
 type PrettifyWithCloseable<T> = {
