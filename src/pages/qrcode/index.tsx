@@ -26,7 +26,7 @@ export default function Page() {
       }
       <div className="text-center font-bold text-2xl mb-8 mt-3">{window.userInfo?.UserName}的邀请二维码</div>
       { step === 1 ?<div className="price-content">
-        <div className="title">价格</div>
+        <div className="title">被邀请人进货价</div>
         <Radio.Group onChange={(price) => setPrice(Number(price))} value={price}>
           {
             [190, 160, 135, 115, 95].map(value => <Radio value={value}>{value}</Radio>)
