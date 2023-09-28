@@ -5,7 +5,6 @@ export const checkLoginStatus = async () => {
   console.log('loginStatusRes',loginStatusRes)
   if (loginStatusRes?.ResponseMetadata?.Code === 0 && loginStatusRes?.Result?.UserID) {
     window.userInfo = loginStatusRes.Result;
-  console.log('window2', window.userInfo)
   if (loginStatusRes.Result.Status === 'passed') {
       return 'login';
     } else {

@@ -1,7 +1,6 @@
 import { ErrorBlock } from "antd-mobile";
 
 export default function Page() {
-  console.log('userinfo', window.userInfo)
   return (
     <div>
       <ErrorBlock

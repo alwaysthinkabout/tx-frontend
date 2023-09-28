@@ -33,7 +33,6 @@ export default function Layout() {
       });
     });
   }, [location.pathname]);
-  console.log('window', window.userInfo)
   useEffect(() => {
     setActiveKey(getTabBarKey(location));
   }, [location.pathname]);
@@ -87,7 +86,7 @@ export default function Layout() {
       location: '/personal',
     },
   ]
-  console.log('location', location);
+
   return (
     <div className={classNames(styles.navs, 'pb-14 h-screen bg-gray-100')}>
       <NavBar
