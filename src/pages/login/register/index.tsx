@@ -25,7 +25,7 @@ export default function Page() {
   }
 
   const submit = async () => {
-    // if (!judgeInvalid()) return
+    if (!judgeInvalid()) return
     form.validateFields().then(async (values) => {
       const { Account, Password, VerificationCode, IdentityID, Name } = values;
       setLoading(true);
@@ -50,7 +50,7 @@ export default function Page() {
     })
   }
 
-  if (Number(params.get('code'))) {
+  if (!Number(params.get('code'))) {
     return <div>
       <ErrorBlock
         fullPage
