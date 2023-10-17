@@ -19,20 +19,26 @@ export default function Layout() {
 
   useEffect(() => {
     checkLoginStatus().then(res => {
+      const userInfo = window?.userInfo || {}
       if (res === 'unlogin' && !location.pathname.includes('login')) {
         history.push('/login');
       } else if (res === 'review') {
         history.push('/login/review');
-      } else if (res === 'login' && location.pathname === '/login') {
-        history.push('/');
+      } else if (res === 'login') {
+        if (userInfo.IsPhoneChecked && location.pathname === '/login') {
+          history.push('/');
+        } else if (!userInfo.IsPhoneChecked && !/^\/login\/?.*$/.test(location.pathname)) {
+          history.push('/login');
+        }
       }
-      setUserInfo(window.userInfo || {});
-      initWX(window.userInfo?.SigInfo);
-      window.wx.ready(function(){
+      setUserInfo(userInfo);
+      initWX(userInfo.SigInfo);
+      window?.wx?.ready(function(){
         console.log('wx ready');
       });
     });
   }, [location.pathname]);
+
   useEffect(() => {
     setActiveKey(getTabBarKey(location));
   }, [location.pathname]);

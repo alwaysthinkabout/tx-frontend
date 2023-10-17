@@ -7,11 +7,15 @@ import styles from "./index.less";
 import { LOGIN_TYPE_TEXT } from "@/constants";
 import { login } from "@/services/login";
 import { checkLoginStatus } from "@/utils/checkLoginStatus";
-
+import { VerifyCode } from "../register/VerifyCode";
+import { verifyPhone } from "@/services/verify";
+import './index.less'
 export default function Page() {
   const [visible, setVisible] = useState(false);
   const [loading, setLoading] = useState(false);
   const [form] = Form.useForm();
+  const [shouldShowVerifyCode, setShouldShowVerifyCode] = useState(false)
+  const [codeTaskId, setCodeTaskId] = useState('')
 
   // useEffect(() => {
   //   checkLoginStatus().then(res => {
@@ -20,18 +24,12 @@ export default function Page() {
   //     }
   //   });
   // }, [])
-
-  const submit = async() => {
-    const value = form.getFieldsValue();
-    setLoading(true);
-    const res = await login({
-      Account: value.Account,
-      AccountType: 'phone',
-      Password: value.Password
-    });
-    if (res.ResponseMetadata.Code === 0) {
-      const loginStatusRes = await checkLoginStatus();
-      setLoading(false);
+  const loginStatusLoading = async () => {
+    const loginStatusRes = await checkLoginStatus();
+    const { IsPhoneChecked } = window.userInfo
+    if (!IsPhoneChecked) {
+      setShouldShowVerifyCode(true)
+    } else {
       if (loginStatusRes === 'login') {
         history.push('/');
       } else if (loginStatusRes === 'review') {
@@ -39,11 +37,37 @@ export default function Page() {
       } else {
         Toast.show({ content: '查询用户信息失败' });
       }
-    } else {
-      setLoading(false);
-      Toast.show({ content: res.ResponseMetadata.MessageCn })
     }
   }
+
+  const submit = async() => {
+    form.validateFields().then(async (values) => {
+      const { Account, Password, VerificationCode } = values;
+      setLoading(true);
+      const value = form.getFieldsValue();
+      let res
+      if (shouldShowVerifyCode) {
+        res = await verifyPhone({ Phone: Account, BizID: codeTaskId, VerificationCode });
+        if (res.ResponseMetadata.Code === 0) {
+          loginStatusLoading()
+        }
+      } else {
+        res = await login({
+          Account: Account,
+          AccountType: 'phone',
+          Password: Password
+        });
+        if (res.ResponseMetadata.Code === 0) {
+          loginStatusLoading()
+        }
+      }
+      if (res.ResponseMetadata.Code !== 0) {
+        Toast.show({ content: res.ResponseMetadata.MessageCn })
+      }
+      setLoading(false);
+    })
+  }
+
   return (
     <div className="p-5">
       <h1 className={classnames(styles.header, "mb-12")}>账号登录</h1>
@@ -54,7 +78,22 @@ export default function Page() {
               { label: "邮箱", value: "mail" }
             ]} />
           </Form.Item> */}
-          <Form.Item label={LOGIN_TYPE_TEXT} name="Account">
+          <Form.Item
+            label={LOGIN_TYPE_TEXT}
+            name="Account"
+            validateFirst
+            rules={[
+              { required: true, message: '请输入手机号' },
+              { whitespace: true, message: '请输入手机号' },
+              { validator: (_, value) => {
+                //中国大陆手机号校验
+                if (/^1[3456789]\d{9}$/.test(value)) {
+                  return Promise.resolve();
+                }
+                return Promise.reject('手机号格式不正确');
+              }}
+            ]}
+          >
             <Input placeholder={`请输入${LOGIN_TYPE_TEXT}`} clearable />
           </Form.Item>
           <Form.Item
@@ -69,6 +108,11 @@ export default function Page() {
                 )}
               </div>
             }
+            validateFirst
+            rules={[
+              { required: true, message: '密码不能为空' },
+              { whitespace: true, message: '密码不能为空' },
+            ]}
           >
             <Input
               placeholder="请输入密码"
@@ -76,6 +120,9 @@ export default function Page() {
               type={visible ? "text" : "password"}
             />
           </Form.Item>
+          {
+            shouldShowVerifyCode && <VerifyCode form={form} onCodeTaskIdChange={(code) => setCodeTaskId(code)} />
+          }
         </Form>
         <Button loading={loading} className="mt-12" block shape="rounded" color="primary" size="large" onClick={submit}>
           登录

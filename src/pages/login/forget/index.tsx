@@ -4,25 +4,15 @@ import { history } from "umi";
 import { Button, Form, Input, Selector, Toast } from "antd-mobile";
 import { EyeInvisibleOutline, EyeOutline } from "antd-mobile-icons"
 import styles from "../index/index.less";
-import { useCountDown } from "@/utils/useCountDown";
 import { LOGIN_TYPE_TEXT } from "@/constants";
 import { forgetPassword } from "@/services/login";
+import { VerifyCode } from "../register/VerifyCode";
 
 export default function Page() {
   const [visible, setVisible] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [codeMessage, setCodeMessage] = useState("获取验证码");
+  const [codeTaskId, setCodeTaskId] = useState('')
   const [form] = Form.useForm();
-
-  const { start, count, isdisable } = useCountDown(
-    60,
-    () => {
-      setCodeMessage(`${count}s后重新获取`);
-    },
-    () => {
-      setCodeMessage("获取验证码");
-    }
-  );
 
   const submit = async () => {
     const value = form.getFieldsValue();
@@ -31,6 +21,8 @@ export default function Page() {
       Address: value.Account,
       AddressType: 'phone',
       NewPassword: value.NewPassword,
+      VerificationCode: value.VerificationCode,
+      BizID: codeTaskId
     });
     setLoading(false);
     if (res.ResponseMetadata.Code === 0) {
@@ -39,11 +31,6 @@ export default function Page() {
     } else {
       Toast.show({ content: res.ResponseMetadata.MessageCn });
     }
-  }
-
-  const handleVerifyCode = () => {
-    start();
-    console.log('click!!!!!')
   }
 
   return (
@@ -59,17 +46,7 @@ export default function Page() {
           <Form.Item label={LOGIN_TYPE_TEXT} name="Account">
             <Input placeholder={`请输入${LOGIN_TYPE_TEXT}`} clearable />
           </Form.Item>
-          {/* <Form.Item
-            label="验证码"
-            name="VerifyCode"
-            extra={
-              <Button className={styles.extraPart} disabled={isdisable} onClick={handleVerifyCode}>
-                <a className="text-gray-600">{codeMessage}</a>
-              </Button>
-            }
-          >
-            <Input placeholder="请输入验证码" clearable />
-          </Form.Item> */}
+          <VerifyCode form={form} onCodeTaskIdChange={(codeTaskId) => setCodeTaskId(codeTaskId)} />
           <Form.Item
             label="新密码"
             name="NewPassword"

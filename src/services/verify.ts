@@ -18,7 +18,7 @@ export const getVerifyList = async ({
 };
 
 export const updateVerifyStatus = async ({
-  UserID, 
+  UserID,
   Status,
 }: {
   UserID: number;
@@ -30,6 +30,26 @@ export const updateVerifyStatus = async ({
     {
       UserID,
       Status,
+    }
+  );
+};
+
+export const verifyPhone = async ({
+  Phone,
+  VerificationCode,
+  BizID
+}: {
+  Phone: string;
+  VerificationCode: string;
+  BizID: string;
+}) => {
+  return request(
+    '/api/v1/VerifyPhone?Action=VerifyPhone',
+    'post',
+    {
+      Phone,
+      VerificationCode,
+      BizID
     }
   );
 };
