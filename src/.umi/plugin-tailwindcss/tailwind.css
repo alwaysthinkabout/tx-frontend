@@ -46,6 +46,14 @@
   margin-top: 1.5rem
 }
 
+#root :is(.ml-6) {
+  margin-left: 1.5rem
+}
+
+#root :is(.ml-2) {
+  margin-left: 0.5rem
+}
+
 #root :is(.block) {
   display: block
 }

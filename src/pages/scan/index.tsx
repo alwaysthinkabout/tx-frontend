@@ -26,20 +26,20 @@ export default function Page() {
     PageNum: 0,
  });
 
-  // const loadMore = async () => {
-  //   const res = await getVipList({
-  //     PageSize: pageInfo.PageSize,
-  //     PageNum: pageInfo.PageNum + 1,
-  //   });
-  //   if (res.ResponseMetadata.Code === 0) {
-  //     setPageInfo(res.Result.PageInfo);
-  //     if (res.Result.List?.length > 0) {
-  //       setList(list.concat(res.Result.List) || list)
-  //     }
-  //   } else {
-  //     Toast.show({ content: res.ResponseMetadata.MessageCn });
-  //   }
-  // }
+  const loadMore = async () => {
+    const res = await getVipList({
+      PageSize: pageInfo.PageSize,
+      PageNum: pageInfo.PageNum + 1,
+    });
+    if (res.ResponseMetadata.Code === 0) {
+      setPageInfo(res.Result.PageInfo);
+      if (res.Result.List?.length > 0) {
+        setList(list.concat(res.Result.List) || list)
+      }
+    } else {
+      Toast.show({ content: res.ResponseMetadata.MessageCn });
+    }
+  }
 
   const handleSearch = async (keyword: string) => {
     const res = await getVipList({
@@ -142,6 +142,7 @@ export default function Page() {
         <SearchBar onChange={val => setKeyword(val)} onSearch={handleSearch} placeholder="输入手机号搜索" className="search-bar" />
         <Button onClick={() => handleSearch(keyword)}>搜索</Button>
       </div>
+      <div className="ml-3" style={{ color: '#999' }}>手机号为空时，可查看所有直推。</div>
       <List className="mt-6">
         {list.map(item => (
           <List.Item key={item.UserID}>
@@ -153,7 +154,7 @@ export default function Page() {
           </List.Item>
         ))}
       </List>
-      {/* <InfiniteScroll loadMore={loadMore} hasMore={pageInfo.Total > pageInfo.PageNum * pageInfo.PageSize} /> */}
+      <InfiniteScroll loadMore={loadMore} hasMore={pageInfo.Total > pageInfo.PageNum * pageInfo.PageSize} />
       <Modal
         visible={modalVisible}
         title="扫货"
